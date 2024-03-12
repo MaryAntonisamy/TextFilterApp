@@ -7,15 +7,17 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddTransient<ITextFilterService, TextFilterService>();
+        services.AddTransient<IFileService, FileService>();
     })
     .Build();
 
 var filePath = @"..\..\..\InputFile.txt";
 
 var textFilterService = host.Services.GetRequiredService<ITextFilterService>();
+var fileService = host.Services.GetRequiredService<IFileService>();
 try
 {
-    string text = File.ReadAllText(filePath);
+    string text =await fileService.ReadAllTextAsync(filePath);
     string filteredText = await textFilterService.ApplyAsync(text);
     Console.WriteLine(filteredText);
 }
