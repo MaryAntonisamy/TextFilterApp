@@ -4,16 +4,19 @@ namespace TextFilterApp.Application.Services;
 
 public class TextFilterService : ITextFilterService
 {
-    public async Task<string> ApplyAsync(string str)
+    public Task<string> ApplyAsync(string str)
     {
-        char[] spearator = { ' ', '.', ',', '!', '?' };
-        String[] strlist = str.Split(spearator,
-              StringSplitOptions.RemoveEmptyEntries);
-        var filteredWords = strlist.Where(word => !MiddleVowlsFilter(word))
-                                 .Where(word => word.Length >= 3)
-                                 .Where(word => !word.Contains('t'))
-                                 .ToList();
-        return string.Join(" ", filteredWords);
+        return Task.Run(() =>
+        {
+            char[] spearator = { ' ', '.', ',', '!', '?' };
+            String[] strlist = str.Split(spearator,
+                  StringSplitOptions.RemoveEmptyEntries);
+            var filteredWords = strlist.Where(word => !MiddleVowlsFilter(word))
+                                     .Where(word => word.Length >= 3)
+                                     .Where(word => !word.Contains('t'))
+                                     .ToList();
+            return string.Join(" ", filteredWords);
+        });
     }
 
     private bool MiddleVowlsFilter(string str)
